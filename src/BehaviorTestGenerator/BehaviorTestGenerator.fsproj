@@ -2,14 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <WarnOn>3390;$(WarnOn)</WarnOn>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="build\BehaviorTestGenerator.InTest.props" />
+    <None Include="build\BehaviorTestGenerator.props">
+      <Pack>true</Pack>
+      <PackagePath>%(Identity)</PackagePath>
+      <Visible>true</Visible>
+    </None>
     <None Include="myriad.toml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Pack>true</Pack>
+      <PackagePath>content</PackagePath>
+      <Visible>true</Visible>
     </None>
     <Compile Include="Library.fs" />
   </ItemGroup>
@@ -20,7 +27,6 @@
     <PackageReference Update="FSharp.Core" Version="5.0.0" PrivateAssets="all" GeneratePathProperty="true" />
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="tools" Visible="false" />
-    <None Include="$(OutputPath)\myriad.toml" Pack="true" PackagePath="content" Visible="false" />
     <None Include="$(PkgMyriad_Core)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="tools" Visible="false" />
     <None Include="$(PkgFSharp_Core)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="tools" Visible="false" />
   </ItemGroup>
