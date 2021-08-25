@@ -18,7 +18,7 @@
       <PackagePath>content</PackagePath>
       <Visible>true</Visible>
     </None>
-    <Compile Include="Library.fs" />
+    <Compile Include="Generator.fs" />
   </ItemGroup>
 
   <ItemGroup>
