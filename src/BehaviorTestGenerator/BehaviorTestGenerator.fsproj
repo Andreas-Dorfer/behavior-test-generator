@@ -8,15 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="myriad.toml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="Library.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Myriad.Core" Version="0.5.3" PrivateAssets="all" GeneratePathProperty="true" />
     <PackageReference Include="Myriad.Sdk" Version="0.5.3" />
+    <PackageReference Update="FSharp.Core" Version="5.0.0" PrivateAssets="all" GeneratePathProperty="true" />
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="tools" Visible="false" />
+    <None Include="$(OutputPath)\myriad.toml" Pack="true" PackagePath="content" Visible="false" />
     <None Include="$(PkgMyriad_Core)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="tools" Visible="false" />
+    <None Include="$(PkgFSharp_Core)\lib\netstandard2.0\*.dll" Pack="true" PackagePath="tools" Visible="false" />
   </ItemGroup>
 
 </Project>
