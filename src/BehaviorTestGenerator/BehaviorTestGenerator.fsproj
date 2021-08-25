@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Myriad.Core" Version="0.5.3" PrivateAssets="all" GeneratePathProperty="true" />
-    <PackageReference Include="Myriad.Sdk" Version="0.5.3" />
+    <PackageReference Include="Myriad.Sdk" Version="0.5.3" PrivateAssets="none" />
     <PackageReference Update="FSharp.Core" Version="5.0.0" PrivateAssets="all" GeneratePathProperty="true" />
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="tools" Visible="false" />
