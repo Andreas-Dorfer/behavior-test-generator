@@ -111,6 +111,6 @@ type Generator () =
     interface IMyriadGenerator with
         member _.ValidInputExtensions = seq { ".fs" }
         member _.Generate(context : GeneratorContext) =
-            if not Debugger.IsAttached then
-                Debugger.Launch() |> ignore
+            //if not Debugger.IsAttached then
+            //    Debugger.Launch() |> ignore
             context.InputFilename |> testsFromBehaviorFile
