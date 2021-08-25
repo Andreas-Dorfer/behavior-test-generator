@@ -1,5 +1,8 @@
 ﻿<Project>
-    <ItemGroup>
-        <MyriadSdkGenerator Include="$(MSBuildThisFileDirectory)/../bin/$(Configuration)/netstandard2.0/BehaviorTestGenerator.dll" />
-    </ItemGroup>
+  <PropertyGroup>
+    <MyriadConfigFile>$(MSBuildThisFileDirectory)/../myriad.toml</MyriadConfigFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <MyriadSdkGenerator Include="$(MSBuildThisFileDirectory)/../bin/$(Configuration)/netstandard2.0/BehaviorTestGenerator.dll" />
+  </ItemGroup>
 </Project>
