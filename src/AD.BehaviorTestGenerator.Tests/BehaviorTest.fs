@@ -7,19 +7,16 @@ namespace AD.BehaviorTestGenerator.Tests
 [<Microsoft.VisualStudio.TestTools.UnitTesting.TestClass>]
 type BehaviorTest() =
     let check property =
-        property
-        >> Async.RunSynchronously
-        |> FsCheck.Check.QuickThrowOnFailure
+        property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
 
-    member private _.Behavior = () |> Implementation |> Behavior
+    member private _.Behavior = Implementation() |> Behavior
+    [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
+    member test.``always true`` () = test.Behavior.``always true`` |> check
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
-    member test.``always true``() = test.Behavior.``always true`` |> check
-
-    [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
-    member test.``plus is commutative``() =
+    member test.``plus is commutative`` () =
         test.Behavior.``plus is commutative`` |> check
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
-    member test.``plus is associative``() =
+    member test.``plus is associative`` () =
         test.Behavior.``plus is associative`` |> check

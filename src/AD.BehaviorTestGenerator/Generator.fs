@@ -90,13 +90,53 @@ module Generator =
 
     let private testsFromFile = typesFromFile >> List.map snd >> List.map (fun type' -> SynModuleDecl.Types (type', Range.range.Zero))
 
-    let private toTests behavior =
-        match behavior |> testsToFile with
-        | None -> []
-        | Some file ->
-            let tests = file |> testsFromFile
-            file |> File.Delete
-            tests
+    let private identExpr parts = SynExpr.CreateLongIdent(LongIdentWithDots.Create(parts))
+
+    let appExpr op left right = SynExpr.CreateApp(SynExpr.CreateApp(left, SynExpr.CreateIdent(Ident.Create(op))), right)
+
+    let private pipe left right = appExpr "op_PipeRight" left right
+
+    let private compose left right = appExpr "op_ComposeRight" left right
+
+    let private toTests (namespace', behaviors) =
+        //match (namespace', behaviors) |> testsToFile with
+        //| None -> []
+        //| Some file ->
+            //let tests = file |> testsFromFile
+            //file |> File.Delete
+
+        let myTypes =
+            match behaviors |> List.choose toTestProperties with
+            | [] -> []
+            | ps ->
+                ps
+                |> List.map (fun (name, imp, props) ->
+                    let testClassAttribute = SynAttribute.Create(["Microsoft"; "VisualStudio"; "TestTools"; "UnitTesting"; "TestClass"] |> List.map Ident.Create, SynConst.Unit)
+                    let info = { SynComponentInfoRcd.Create([Ident.Create (name + "Test")]) with Attributes = [SynAttributeList.Create(testClassAttribute)]}
+                    let ctor = SynMemberDefn.CreateImplicitCtor()
+                    let checkPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("check"), [SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("property"), [])])
+                    let checkExpr = pipe (compose (identExpr ["property"]) (identExpr ["Async"; "RunSynchronously"])) (identExpr ["FsCheck"; "Check"; "QuickThrowOnFailure"])
+                    let check = SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = checkPattern; ReturnInfo = None; Expr = checkExpr }.FromRcd], false, false, Range.range.Zero)
+                    
+                    let behaviorPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["_"; "Behavior"]), [])
+                    let behaviorExpressen =
+                        match imp with
+                        | Some imp -> pipe (SynExpr.CreateApp(identExpr [imp], SynExpr.CreateUnit)) (identExpr[name])
+                        | None -> SynExpr.CreateApp(identExpr [name], SynExpr.CreateUnit)
+                    let behaviorProp = SynMemberDefn.CreateMember({ SynBindingRcd.Null with Access = Some SynAccess.Private ; Pattern = behaviorPattern; Expr = behaviorExpressen })
+
+                    let tests =
+                        props
+                        |> List.map (fun prop ->
+                            let testMethodAttribute = SynAttribute.Create(["Microsoft"; "VisualStudio"; "TestTools"; "UnitTesting"; "TestMethod"] |> List.map Ident.Create, SynConst.Unit)
+                            let testMethodName = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["test"; prop]), [SynPatRcd.Const({ Const = SynConst.Unit; Range = Range.range.Zero })])
+                            let testExpr = pipe (identExpr ["test"; "Behavior"; prop]) (identExpr ["check"])
+
+                            SynMemberDefn.CreateMember({ SynBindingRcd.Null with Attributes = [SynAttributeList.Create(testMethodAttribute)] ; Pattern = testMethodName; Expr = testExpr }))
+
+                    SynModuleDecl.CreateType(info, [ctor; check ; behaviorProp] @ tests))
+        myTypes
+        //tests
 
     let private createTests (namespace', behaviors) = (namespace', behaviors) |> toTests |> (AstRcd.SynModuleOrNamespaceRcd.CreateNamespace namespace').AddDeclarations
 
@@ -111,6 +151,6 @@ type Generator () =
     interface IMyriadGenerator with
         member _.ValidInputExtensions = seq { ".fs" }
         member _.Generate(context : GeneratorContext) =
-            //if not Debugger.IsAttached then
-            //    Debugger.Launch() |> ignore
+            if not Debugger.IsAttached then
+                Debugger.Launch() |> ignore
             context.InputFilename |> testsFromBehaviorFile
