@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Implementation.fs" />
     <Compile Include="Behavior.fs" />
     <Compile Include="BehaviorTest.fs">
       <MyriadFile>Behavior.fs</MyriadFile>

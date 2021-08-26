@@ -11,7 +11,7 @@ type BehaviorTest() =
         >> Async.RunSynchronously
         |> FsCheck.Check.QuickThrowOnFailure
 
-    member private _.Behavior = () |> Behavior
+    member private _.Behavior = () |> Implementation |> Behavior
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
     member test.``1st behavior``() = test.Behavior.``1st behavior`` |> check
