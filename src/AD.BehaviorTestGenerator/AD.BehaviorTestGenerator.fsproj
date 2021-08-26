@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="README.md">
+    <None Include="README_.md">
       <Pack>true</Pack>
       <PackagePath>docs</PackagePath>
       <Visible>true</Visible>
