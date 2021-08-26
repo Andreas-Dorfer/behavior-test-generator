@@ -1,5 +1,5 @@
 [![NuGet Package](https://img.shields.io/nuget/v/AndreasDorfer.BehaviorTestGenerator.svg)](https://www.nuget.org/packages/AndreasDorfer.BehaviorTestGenerator/)
-# behavior-test-generator
+# AD.BehaviorTestGenerator
 A [Myriad](https://github.com/MoiraeSoftware/myriad) plugin to create test classes from behaviors.
 ## NuGet Package
     PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.3
@@ -14,7 +14,6 @@ type Project = {
 }
 
 type ``create project`` = Project -> Async<ProjectId>
-
 type ``get project`` = ProjectId -> Async<Project option>
 ```
 And some implementation:
@@ -37,4 +36,24 @@ type Behavior (imp : Implementation) =
         let! actual = unknownId |> imp.Get
         return actual = None
     }
+```
+Now, `AD.BehaviorTestGenerator` turns the behavior into a test class:
+```fsharp
+[<Microsoft.VisualStudio.TestTools.UnitTesting.TestClass>]
+type BehaviorTest() =
+    let check property =
+        property
+        >> Async.RunSynchronously
+        |> FsCheck.Check.QuickThrowOnFailure
+
+    member private _.Behavior = () |> Implementation |> Behavior
+
+    [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
+    member test.``create a project``() =
+        test.Behavior.``create a project`` |> check
+
+    [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
+    member test.``getting an unknown project returns None``() =
+        test.Behavior.``getting an unknown project returns None``
+        |> check
 ```
