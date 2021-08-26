@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "BehaviorTestGenerator", "BehaviorTestGenerator\BehaviorTestGenerator.fsproj", "{5EE9898A-A062-4622-9DD5-06DEE05D1270}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "AD.BehaviorTestGenerator", "AD.BehaviorTestGenerator\AD.BehaviorTestGenerator.fsproj", "{46338127-AA28-4AF0-B634-D52559A7330C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5EE9898A-A062-4622-9DD5-06DEE05D1270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5EE9898A-A062-4622-9DD5-06DEE05D1270}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5EE9898A-A062-4622-9DD5-06DEE05D1270}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5EE9898A-A062-4622-9DD5-06DEE05D1270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46338127-AA28-4AF0-B634-D52559A7330C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46338127-AA28-4AF0-B634-D52559A7330C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46338127-AA28-4AF0-B634-D52559A7330C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46338127-AA28-4AF0-B634-D52559A7330C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D40A984F-8AED-495B-843C-193689E45933}
+		SolutionGuid = {C2D73BD9-790F-4ED1-B9C8-78CA7BC42570}
 	EndGlobalSection
 EndGlobal

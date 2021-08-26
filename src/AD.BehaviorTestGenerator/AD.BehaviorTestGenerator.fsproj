@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="build\BehaviorTestGenerator.InTest.props" />
-    <None Include="build\BehaviorTestGenerator.props">
+    <None Include="build\AD.BehaviorTestGenerator.InTest.props" />
+    <None Include="build\AD.BehaviorTestGenerator.props">
       <Pack>true</Pack>
       <PackagePath>%(Identity)</PackagePath>
       <Visible>true</Visible>

@@ -1,4 +1,4 @@
-﻿namespace BehaviorTestGenerator
+﻿namespace AD.BehaviorTestGenerator
 
 open System
 open System.IO

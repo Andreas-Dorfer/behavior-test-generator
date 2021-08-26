@@ -3,6 +3,6 @@
     <MyriadConfigFile>$(MSBuildThisFileDirectory)/../tools/myriad.toml</MyriadConfigFile>
   </PropertyGroup>
   <ItemGroup>
-    <MyriadSdkGenerator Include="$(MSBuildThisFileDirectory)/../tools/BehaviorTestGenerator.dll" />
+    <MyriadSdkGenerator Include="$(MSBuildThisFileDirectory)/../tools/AD.BehaviorTestGenerator.dll" />
   </ItemGroup>
 </Project>
