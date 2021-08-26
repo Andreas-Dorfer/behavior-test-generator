@@ -22,7 +22,7 @@ type Implementation () =
     member _.Create : ``create project`` = //...
     member _.Get : ``get project`` = //...
 ```
-Then, you can specify the implementation's behavior like:
+Then, you can specify the implementation's behavior like this:
 ```fsharp
 type Behavior (imp : Implementation) =
 
@@ -36,6 +36,13 @@ type Behavior (imp : Implementation) =
         let! actual = unknownId |> imp.Get
         return actual = None
     }
+```
+To activate `AD.BehaviorTestGenerator`, add the `MyriadFile` element to your project file:
+```xml
+<Compile Include="Behavior.fs" />
+<Compile Include="BehaviorTests.fs">
+  <MyriadFile>Behavior.fs</MyriadFile>
+</Compile>
 ```
 Now, `AD.BehaviorTestGenerator` turns the behavior into a test class:
 ```fsharp
