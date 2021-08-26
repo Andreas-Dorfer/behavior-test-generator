@@ -13,5 +13,3 @@ type Behavior (imp : Implementation) =
     member _.``plus is associative`` (a, b, c) = async {
         return (((a, b) |> imp.Plus, c) |> imp.Plus) = ((a, (b, c) |> imp.Plus) |> imp.Plus)
     }
-
-

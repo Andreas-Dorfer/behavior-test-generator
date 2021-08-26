@@ -1,5 +1,6 @@
 ﻿module internal AD.BehaviorTestGenerator.Test
 
+open FSharp.Compiler
 open FSharp.Compiler.SyntaxTree
 open FsAst
 
@@ -13,10 +14,7 @@ let private memberName = function
 let private implementation (members : SynMemberDefns) =
     let type' =
         members |> List.choose (function
-            | SynMemberDefn.ImplicitCtor (_, _, args, _, _, _) ->
-                match args with
-                | SynSimplePats.SimplePats ([SynSimplePat.Typed (_, SynType.LongIdent id, _)], _) -> Some id.AsString
-                | _ -> None
+            | SynMemberDefn.ImplicitCtor (_, _, SynSimplePats.SimplePats ([SynSimplePat.Typed (_, SynType.LongIdent id, _)], _), _, _, _) -> Some id.AsString
             | _ -> None)
     match type' with
     | [imp] -> Some imp
@@ -39,6 +37,8 @@ let private toTestProperties (behavior : SynTypeDefn) =
         let name = rcd.Info.Id.Head.idText
         Some (name, imp, members)
 
+let private attribute parts = [SynAttributeList.Create(SynAttribute.Create(parts |> List.map Ident.Create, SynConst.Unit))]
+
 let private identExpr parts = SynExpr.CreateLongIdent(LongIdentWithDots.Create(parts))
 
 let private appExpr op left right = SynExpr.CreateApp(SynExpr.CreateApp(left, SynExpr.CreateIdent(Ident.Create(op))), right)
@@ -50,32 +50,32 @@ let private compose left right = appExpr "op_ComposeRight" left right
 let private toTests behaviors =
     match behaviors |> List.choose toTestProperties with
     | [] -> []
-    | ps ->
-        ps
-        |> List.map (fun (name, imp, props) ->
-            let testClassAttribute = SynAttribute.Create(["Microsoft"; "VisualStudio"; "TestTools"; "UnitTesting"; "TestClass"] |> List.map Ident.Create, SynConst.Unit)
-            let info = { SynComponentInfoRcd.Create([Ident.Create (name + "Test")]) with Attributes = [SynAttributeList.Create(testClassAttribute)]}
-            let ctor = SynMemberDefn.CreateImplicitCtor()
+    | testProperties ->
+        testProperties
+        |> List.map (fun (name, implementation, properties) ->
+            let testClassAttribute =["Microsoft"; "VisualStudio"; "TestTools"; "UnitTesting"; "TestClass"] |> attribute
+            let testClassInfo = { SynComponentInfoRcd.Create([Ident.Create (name + "Test")]) with Attributes = testClassAttribute }
+            let testClassCtor = SynMemberDefn.CreateImplicitCtor()
+
             let checkPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("check"), [SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("property"), [])])
             let checkExpr = pipe (compose (identExpr ["property"]) (identExpr ["Async"; "RunSynchronously"])) (identExpr ["FsCheck"; "Check"; "QuickThrowOnFailure"])
             let check = SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = checkPattern; ReturnInfo = None; Expr = checkExpr }.FromRcd], false, false, Range.range.Zero)
             
             let behaviorPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["_"; "Behavior"]), [])
             let behaviorExpressen =
-                match imp with
+                match implementation with
                 | Some imp -> pipe (SynExpr.CreateApp(identExpr [imp], SynExpr.CreateUnit)) (identExpr[name])
                 | None -> SynExpr.CreateApp(identExpr [name], SynExpr.CreateUnit)
-            let behaviorProp = SynMemberDefn.CreateMember({ SynBindingRcd.Null with Access = Some SynAccess.Private ; Pattern = behaviorPattern; Expr = behaviorExpressen })
+            let behaviorMember = SynMemberDefn.CreateMember({ SynBindingRcd.Null with Access = Some SynAccess.Private ; Pattern = behaviorPattern; Expr = behaviorExpressen })
 
-            let tests =
-                props
+            let testMembers =
+                properties
                 |> List.map (fun prop ->
-                    let testMethodAttribute = SynAttribute.Create(["Microsoft"; "VisualStudio"; "TestTools"; "UnitTesting"; "TestMethod"] |> List.map Ident.Create, SynConst.Unit)
+                    let testMethodAttribute = ["Microsoft"; "VisualStudio"; "TestTools"; "UnitTesting"; "TestMethod"] |> attribute
                     let testMethodName = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["test"; prop]), [SynPatRcd.Const({ Const = SynConst.Unit; Range = Range.range.Zero })])
                     let testExpr = pipe (identExpr ["test"; "Behavior"; prop]) (identExpr ["check"])
+                    SynMemberDefn.CreateMember({ SynBindingRcd.Null with Attributes = testMethodAttribute ; Pattern = testMethodName; Expr = testExpr }))
 
-                    SynMemberDefn.CreateMember({ SynBindingRcd.Null with Attributes = [SynAttributeList.Create(testMethodAttribute)] ; Pattern = testMethodName; Expr = testExpr }))
-
-            SynModuleDecl.CreateType(info, [ctor; check ; behaviorProp] @ tests))
+            SynModuleDecl.CreateType(testClassInfo, [testClassCtor; check ; behaviorMember] @ testMembers))
 
 let create (namespace', behaviors) = behaviors |> toTests |> (AstRcd.SynModuleOrNamespaceRcd.CreateNamespace namespace').AddDeclarations
