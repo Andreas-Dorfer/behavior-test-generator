@@ -25,6 +25,7 @@
       <PackagePath>tools</PackagePath>
       <Visible>true</Visible>
     </None>
+    <Compile Include="Behavior.fs" />
     <Compile Include="Generator.fs" />
   </ItemGroup>
 

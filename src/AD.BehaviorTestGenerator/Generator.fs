@@ -1,30 +1,11 @@
 ﻿namespace AD.BehaviorTestGenerator
 
-open System
-open System.IO
-open System.Text
 open FSharp.Compiler
 open FSharp.Compiler.SyntaxTree
 open FsAst
 open Myriad.Core
 
 module Generator =
-
-    let private typesFromFile = Ast.fromFilename >> Async.RunSynchronously >> Array.head >> fst >> Ast.extractTypeDefn
-
-    let private typeName (type' : SynTypeDefn) = type'.ToRcd.Info.Id.Head.idText
-
-    let private containsBehavior (str : string) = str.IndexOf("Behavior", StringComparison.InvariantCultureIgnoreCase) > -1
-
-    let private isBehavior = typeName >> containsBehavior
-
-    let private chooseBehaviors (namespace', types) =
-        let chooseBehavior type' = if type' |> isBehavior then Some type' else None
-        match types |> List.choose chooseBehavior with
-        | [] -> None
-        | behaviors -> Some (namespace', behaviors)
-
-    let private behaviorsFromFile = typesFromFile >> List.choose chooseBehaviors
 
     let private memberName = function
         | SynMemberDefn.Member (member', _) ->
@@ -103,7 +84,7 @@ module Generator =
 
     let private createTests (namespace', behaviors) = behaviors |> toTests |> (AstRcd.SynModuleOrNamespaceRcd.CreateNamespace namespace').AddDeclarations
 
-    let testsFromBehaviorFile = behaviorsFromFile >> List.map createTests
+    let testsFromBehaviorFile = Behavior.fromFile >> List.map createTests
 
 
 open Generator
