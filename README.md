@@ -22,7 +22,7 @@ type Implementation () =
     member _.Create : ``create project`` = //...
     member _.Get : ``get project`` = //...
 ```
-Then, you can define the implementation's behavior like:
+Then, you can specify the implementation's behavior like:
 ```fsharp
 type Behavior (imp : Implementation) =
 
