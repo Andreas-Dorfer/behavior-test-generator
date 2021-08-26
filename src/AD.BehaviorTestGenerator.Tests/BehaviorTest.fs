@@ -14,7 +14,8 @@ type BehaviorTest() =
     member private _.Behavior = () |> Implementation |> Behavior
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
-    member test.``1st behavior``() = test.Behavior.``1st behavior`` |> check
+    member test.``always true``() = test.Behavior.``always true`` |> check
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
-    member test.``2st behavior``() = test.Behavior.``2st behavior`` |> check
+    member test.``plus is commutative``() =
+        test.Behavior.``plus is commutative`` |> check
