@@ -64,6 +64,6 @@ type BehaviorTest() =
         test.Behavior.``getting an unknown project returns None``
         |> check
 ```
-You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
+It uses [MSTest](https://github.com/microsoft/testfx) and [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
 ## Note
 `AD.BehaviorTestGenerator` is in an early stage - it's convention based and not configurable.
