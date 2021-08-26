@@ -11,14 +11,11 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Andreas-Dorfer/behavior-test-generator</RepositoryUrl>
     <PackageTags>F#, BDD, testing, Myriad, MSTest, FsCheck</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="README.md">
-      <Pack>true</Pack>
-      <PackagePath>docs</PackagePath>
-      <Visible>true</Visible>
-    </None>
+    <None Include="docs\README.md" Pack="true" PackagePath="\" />
     <None Include="build\AD.BehaviorTestGenerator.InTest.props" />
     <None Include="build\AD.BehaviorTestGenerator.props">
       <Pack>true</Pack>
