@@ -107,13 +107,14 @@ module Generator =
 
 
 open Generator
-open System.Diagnostics
 
 [<MyriadGenerator "behaviorTest">]
 type Generator () =
     interface IMyriadGenerator with
         member _.ValidInputExtensions = seq { ".fs" }
         member _.Generate(context : GeneratorContext) =
-            if not Debugger.IsAttached then
-                Debugger.Launch() |> ignore
+#if DEBUG
+            if not System.Diagnostics.Debugger.IsAttached then
+                System.Diagnostics.Debugger.Launch() |> ignore
+#endif
             context.InputFilename |> testsFromBehaviorFile
