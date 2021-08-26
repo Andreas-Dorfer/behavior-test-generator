@@ -4,6 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <WarnOn>3390;$(WarnOn)</WarnOn>
+    <PackageId>AndreasDorfer.BehaviorTestGenerator</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Andreas Dorfer</Authors>
+    <Description>A Myriad plugin to create test classes from behaviors.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Andreas-Dorfer/behavior-test-generator</RepositoryUrl>
+    <PackageTags>F#, BDD, testing, Myriad, MSTest, FsCheck</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
