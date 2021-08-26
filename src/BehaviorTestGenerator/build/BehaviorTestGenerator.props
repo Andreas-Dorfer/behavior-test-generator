@@ -1,6 +1,6 @@
 ﻿<Project>
   <PropertyGroup>
-    <MyriadConfigFile>$(MSBuildThisFileDirectory)/../contentFiles/any/netstandard2.0/myriad.toml</MyriadConfigFile>
+    <MyriadConfigFile>$(MSBuildThisFileDirectory)/../tools/myriad.toml</MyriadConfigFile>
   </PropertyGroup>
   <ItemGroup>
     <MyriadSdkGenerator Include="$(MSBuildThisFileDirectory)/../tools/BehaviorTestGenerator.dll" />

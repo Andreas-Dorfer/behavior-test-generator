@@ -15,6 +15,7 @@
     </None>
     <None Include="myriad.toml">
       <Pack>true</Pack>
+      <PackagePath>tools</PackagePath>
       <Visible>true</Visible>
     </None>
     <Compile Include="Generator.fs" />
