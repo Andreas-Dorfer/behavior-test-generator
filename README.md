@@ -37,7 +37,7 @@ type Behavior (imp : Implementation) =
         return actual = None
     }
 ```
-To activate `AD.BehaviorTestGenerator`, add the `MyriadFile` element:
+Add the `MyriadFile` element to activate `AD.BehaviorTestGenerator`:
 ```xml
 <Compile Include="Behavior.fs" />
 <Compile Include="BehaviorTests.fs">
