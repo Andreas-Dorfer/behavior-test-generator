@@ -14,6 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="readme.md">
+      <Pack>true</Pack>
+      <PackagePath>docs</PackagePath>
+      <Visible>true</Visible>
+    </None>
     <None Include="build\AD.BehaviorTestGenerator.InTest.props" />
     <None Include="build\AD.BehaviorTestGenerator.props">
       <Pack>true</Pack>
