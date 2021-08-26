@@ -19,3 +19,7 @@ type BehaviorTest() =
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
     member test.``plus is commutative``() =
         test.Behavior.``plus is commutative`` |> check
+
+    [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
+    member test.``plus is associative``() =
+        test.Behavior.``plus is associative`` |> check
