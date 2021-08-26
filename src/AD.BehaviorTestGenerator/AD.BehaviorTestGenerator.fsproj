@@ -3,20 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <WarnOn>3390;$(WarnOn)</WarnOn>
     <PackageId>AndreasDorfer.BehaviorTestGenerator</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <Authors>Andreas Dorfer</Authors>
     <Description>A Myriad plugin to create test classes from behaviors.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Andreas-Dorfer/behavior-test-generator</RepositoryUrl>
     <PackageTags>F#, BDD, testing, Myriad, MSTest, FsCheck</PackageTags>
-    <PackageReadmeFile>docs\README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="docs\README.md" Pack="true" PackagePath="%(Identity)" />
     <None Include="build\AD.BehaviorTestGenerator.InTest.props" />
     <None Include="build\AD.BehaviorTestGenerator.props">
       <Pack>true</Pack>
@@ -34,9 +31,8 @@
   <ItemGroup>
     <PackageReference Include="Myriad.Core" Version="0.5.3" PrivateAssets="all" />
     <PackageReference Include="Myriad.Sdk" Version="0.5.3" PrivateAssets="none" />
-    <PackageReference Update="FSharp.Core" Version="5.0.0" PrivateAssets="all" />
     <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-    <None Include="$(OutputPath)\*.dll" Pack="true" PackagePath="tools" Visible="false" />
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="tools" Visible="false" />
   </ItemGroup>
 
 </Project>
