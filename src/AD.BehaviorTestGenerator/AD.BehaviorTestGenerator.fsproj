@@ -26,6 +26,7 @@
       <Visible>true</Visible>
     </None>
     <Compile Include="Behavior.fs" />
+    <Compile Include="Test.fs" />
     <Compile Include="Generator.fs" />
   </ItemGroup>
 
