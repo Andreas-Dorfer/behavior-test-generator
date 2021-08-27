@@ -18,13 +18,13 @@ type ``get project`` = ProjectId -> Async<Project option>
 ```
 And some implementation:
 ```fsharp
-type Implementation () =
+type Implementation() =
     member _.Create : ``create project`` = //...
     member _.Get : ``get project`` = //...
 ```
 Then, you can specify the implementation's behavior like this:
 ```fsharp
-type Behavior (imp : Implementation) =
+type Behavior(imp : Implementation) =
 
     member _.``create a project`` expected = async {
         let! id = expected |> imp.Create
