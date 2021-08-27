@@ -1,4 +1,5 @@
-﻿module Business.Service
+﻿[<CompilationRepresentation (CompilationRepresentationFlags.ModuleSuffix)>]
+module Business.Project
     
 open System
 

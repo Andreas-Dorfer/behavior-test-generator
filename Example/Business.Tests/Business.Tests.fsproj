@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="InMemoryDataAccess.fs" />
     <Compile Include="Implementation.fs" />
     <Compile Include="Behavior.fs" />
     <Compile Include="BehaviorTests.fs">
