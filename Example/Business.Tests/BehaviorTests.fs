@@ -7,17 +7,13 @@ namespace Business.Tests
 [<Microsoft.VisualStudio.TestTools.UnitTesting.TestClass>]
 type BehaviorTest() =
     let check property =
-        property
-        >> Async.RunSynchronously
-        |> FsCheck.Check.QuickThrowOnFailure
+        property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
 
-    member private _.Behavior = () |> Implementation |> Behavior
-
+    member private _.Behavior = Implementation() |> Behavior
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
-    member test.``create a project``() =
+    member test.``create a project`` () =
         test.Behavior.``create a project`` |> check
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
-    member test.``getting an unknown project returns None``() =
-        test.Behavior.``getting an unknown project returns None``
-        |> check
+    member test.``getting an unknown project returns None`` () =
+        test.Behavior.``getting an unknown project returns None`` |> check
