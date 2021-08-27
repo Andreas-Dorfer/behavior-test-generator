@@ -63,3 +63,8 @@ type BehaviorTest() =
 It uses [MSTest](https://github.com/microsoft/testfx) and [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
 ## Note
 `AD.BehaviorTestGenerator` is in an early stage. For now, its convention based and not configurable.
+### Conventions
+- The behavior class's name must contain "behavior".
+- The behavior class must have an empty constructor *or* a constructor with a single **typed** parameter for the the implementation instance.
+- The implementation class must have an empty constructor.
+- The behaviors must be public methods with a single parameter (including unit and tuples).
