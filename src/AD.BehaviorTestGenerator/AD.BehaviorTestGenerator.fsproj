@@ -5,26 +5,20 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <WarnOn>3390;$(WarnOn)</WarnOn>
     <PackageId>AndreasDorfer.BehaviorTestGenerator</PackageId>
-    <Version>0.1.3</Version>
+    <Version>0.1.4</Version>
     <Authors>Andreas Dorfer</Authors>
     <Description>A Myriad plugin to create test classes from behaviors.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Andreas-Dorfer/behavior-test-generator</RepositoryUrl>
     <PackageTags>F#, BDD, testing, Myriad, MSTest, FsCheck</PackageTags>
+    <PackageReadmeFile>docs\README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="docs\README.md" Pack="true" PackagePath="docs" />
     <None Include="build\AndreasDorfer.BehaviorTestGenerator.InTest.props" />
-    <None Include="build\AndreasDorfer.BehaviorTestGenerator.props">
-      <Pack>true</Pack>
-      <PackagePath>build</PackagePath>
-      <Visible>true</Visible>
-    </None>
-    <None Include="myriad.toml">
-      <Pack>true</Pack>
-      <PackagePath>tools</PackagePath>
-      <Visible>true</Visible>
-    </None>
+    <None Include="build\AndreasDorfer.BehaviorTestGenerator.props" Pack="true" PackagePath="build" />
+    <None Include="myriad.toml" Pack="true" PackagePath="tools" />
     <Compile Include="Behavior.fs" />
     <Compile Include="Test.fs" />
     <Compile Include="Generator.fs" />
