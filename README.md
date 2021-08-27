@@ -2,7 +2,7 @@
 # AD.BehaviorTestGenerator
 A [Myriad](https://github.com/MoiraeSoftware/myriad) plugin to create test classes from behaviors.
 ## NuGet Package
-    PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.3
+    PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.4
 ## Example
 Given a definition:
 ```fsharp
@@ -48,12 +48,9 @@ Now, `AD.BehaviorTestGenerator` turns the behavior into a test class:
 ```fsharp
 [<Microsoft.VisualStudio.TestTools.UnitTesting.TestClass>]
 type BehaviorTest() =
-    let check property =
-        property
-        >> Async.RunSynchronously
-        |> FsCheck.Check.QuickThrowOnFailure
+    let check property = property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
 
-    member private _.Behavior = () |> Implementation |> Behavior
+    member private _.Behavior = Implementation() |> Behavior
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
     member test.``create a project``() =
@@ -61,8 +58,7 @@ type BehaviorTest() =
 
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
     member test.``getting an unknown project returns None``() =
-        test.Behavior.``getting an unknown project returns None``
-        |> check
+        test.Behavior.``getting an unknown project returns None`` |> check
 ```
 It uses [MSTest](https://github.com/microsoft/testfx) and [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
 ## Note
