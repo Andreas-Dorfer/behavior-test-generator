@@ -1,6 +1,6 @@
 [![NuGet Package](https://img.shields.io/nuget/v/AndreasDorfer.BehaviorTestGenerator.svg)](https://www.nuget.org/packages/AndreasDorfer.BehaviorTestGenerator/)
 # AD.BehaviorTestGenerator
-A [Myriad](https://github.com/MoiraeSoftware/myriad) plugin to create test classes from behaviors.
+A [Myriad](https://github.com/MoiraeSoftware/myriad) plugin to generate test classes from behaviors.
 ## NuGet Package
     PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.4
 ## Example
@@ -46,20 +46,25 @@ Add the `MyriadFile` element to activate `AD.BehaviorTestGenerator`:
 ```
 Now, `AD.BehaviorTestGenerator` turns the behavior into a test class:
 ```fsharp
-[<Microsoft.VisualStudio.TestTools.UnitTesting.TestClass>]
+[<TestClass>]
 type BehaviorTest() =
-    let check property = property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
+    let check property = property >> Async.RunSynchronously |> Check.QuickThrowOnFailure
 
     member private _.Behavior = Implementation() |> Behavior
 
-    [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
+    [<TestMethod>]
     member test.``create a project``() =
         test.Behavior.``create a project`` |> check
 
-    [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
+    [<TestMethod>]
     member test.``getting an unknown project returns None``() =
         test.Behavior.``getting an unknown project returns None`` |> check
 ```
 It uses [MSTest](https://github.com/microsoft/testfx) and [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
 ## Note
 `AD.BehaviorTestGenerator` is in an early stage. For now, its convention based and not configurable.
+### Conventions
+- The behavior class's name must contain "behavior".
+- The behavior class must have an empty constructor *or* a constructor with a single **typed** parameter for the implementation instance.
+- The implementation class must have an empty constructor.
+- The behaviors must be public methods with a single parameter (including unit and tuples) and an async result.
