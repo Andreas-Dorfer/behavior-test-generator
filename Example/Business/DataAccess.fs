@@ -1,5 +1,5 @@
 ﻿namespace Business
 
-type ``insert project`` = ProjectId * Project -> Async<unit>
+type ``insert project entity`` = ProjectId * Project -> Async<unit>
 
-type ``load project`` = ProjectId -> Async<Project option>
+type ``load project entity`` = ProjectId -> Async<Project option>

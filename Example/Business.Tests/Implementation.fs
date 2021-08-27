@@ -7,12 +7,12 @@ type Implementation () =
     
     let store = Dictionary ()
 
-    let insert : ``insert project`` =
+    let insert : ``insert project entity`` =
         fun projectEntity -> async {
             projectEntity |> store.Add
         }
     
-    let load : ``load project`` =
+    let load : ``load project entity`` =
         fun id -> async {
             match id |> store.TryGetValue with
             | (true, project) -> return Some project
