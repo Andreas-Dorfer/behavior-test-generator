@@ -11,7 +11,7 @@
     <Compile Include="InMemoryDataAccess.fs" />
     <Compile Include="Implementation.fs" />
     <Compile Include="Behavior.fs" />
-    <Compile Include="BehaviorTests.fs">
+    <Compile Include="BehaviorTest.fs">
       <MyriadFile>Behavior.fs</MyriadFile>
     </Compile>
     <Compile Include="Program.fs" />
