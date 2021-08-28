@@ -61,10 +61,10 @@ type BehaviorTest() =
     member _.``getting an unknown project returns None`` () =
         behavior.``getting an unknown project returns None`` |> check
 
-    interface System.IDisposable with
+    interface IDisposable with
         member _.Dispose() =
             match imp :> obj with
-            | :? System.IDisposable as imp -> imp.Dispose()
+            | :? IDisposable as imp -> imp.Dispose()
             | _ -> ()
 ```
 It uses [MSTest](https://github.com/microsoft/testfx) and [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
