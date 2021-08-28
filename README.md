@@ -51,7 +51,7 @@ type BehaviorTest() =
     let imp = Implementation()
     let behavior = Behavior imp
     let check property =
-        property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
+        property >> Async.RunSynchronously |> Check.QuickThrowOnFailure
 
     [<TestMethod>]
     member _.``create a project`` () =
