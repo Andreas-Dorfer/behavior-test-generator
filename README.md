@@ -67,7 +67,23 @@ type BehaviorTest() =
             | :? IDisposable as imp -> imp.Dispose()
             | _ -> ()
 ```
-It uses [MSTest](https://github.com/microsoft/testfx) and [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
+It uses [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
+## Configuration
+At first build, `myriad.toml` is copied to your project:
+```toml
+[behaviorTest]
+
+# ** MSTest **
+classAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestClass"
+methodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod"
+# ************
+
+# ** Xunit **
+# classAttribute = ""
+# methodAttribute = "Xunit.Fact"
+# ***********
+```
+It includes templates for [MSTest](https://github.com/microsoft/testfx) and [Xunit](https://xunit.net/). You can configure the emitted attributes by changing the values of `classAttribute` and `methodAttribute`. 
 ## Note
 `AD.BehaviorTestGenerator` is in an early stage. For now, its convention based.
 ### Conventions
