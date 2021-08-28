@@ -1,8 +1,13 @@
 ﻿<Project>
-  <PropertyGroup>
-    <MyriadConfigFile>$(MSBuildThisFileDirectory)/../tools/myriad.toml</MyriadConfigFile>
-  </PropertyGroup>
   <ItemGroup>
     <MyriadSdkGenerator Include="$(MSBuildThisFileDirectory)/../tools/AD.BehaviorTestGenerator.dll" />
+  </ItemGroup>
+  <Target Name="CopyBehaviorTestMyriadToml" BeforeTargets="Build">
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)/../tools/myriad.toml"
+          DestinationFolder="$(ProjectDir)"
+          Condition="!Exists('$(ProjectDir)/myriad.toml')"/>
+  </Target>
+  <ItemGroup>
+    <None Include="myriad.toml" />
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@
     <None Include="build\AndreasDorfer.BehaviorTestGenerator.InTest.props" />
     <None Include="build\AndreasDorfer.BehaviorTestGenerator.props" Pack="true" PackagePath="build" />
     <None Include="myriad.toml" Pack="true" PackagePath="tools" />
+    <Compile Include="Config.fs" />
     <Compile Include="Behavior.fs" />
     <Compile Include="Test.fs" />
     <Compile Include="Generator.fs" />

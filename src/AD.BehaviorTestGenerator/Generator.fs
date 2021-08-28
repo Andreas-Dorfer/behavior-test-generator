@@ -2,8 +2,19 @@
 
 open Myriad.Core
 
-[<MyriadGenerator "behaviorTest">]
+[<MyriadGenerator (Config.name)>]
 type Generator () =
+
+    let readConfig getter =
+        Config.name
+        |> getter
+        |> Seq.choose (fun (key, value : obj) ->
+            if key = Config.classAttribute || key = Config.methodAttribute then
+                match value with
+                | :? string as value -> Some (key, value)
+                | _ -> None
+            else None)
+        |> Map.ofSeq
 
     interface IMyriadGenerator with
 
@@ -14,4 +25,5 @@ type Generator () =
             if not System.Diagnostics.Debugger.IsAttached then
                 System.Diagnostics.Debugger.Launch() |> ignore
 #endif
-            context.InputFilename |> Behavior.fromFile |> List.map Test.create
+            let config = context.ConfigGetter |> readConfig
+            context.InputFilename |> Behavior.fromFile |> List.map (Test.create config)

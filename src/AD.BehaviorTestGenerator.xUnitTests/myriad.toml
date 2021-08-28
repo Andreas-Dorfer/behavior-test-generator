@@ -1,0 +1,3 @@
+﻿[behaviorTest]
+classAttribute = ""
+methodAttribute = "Xunit.Fact"
