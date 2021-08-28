@@ -83,7 +83,9 @@ methodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod"
 # methodAttribute = "Xunit.Fact"
 # ***********
 ```
-It includes templates for [MSTest](https://github.com/microsoft/testfx) and [xUnit](https://xunit.net/). You can configure the emitted attributes by changing the values of `classAttribute` and `methodAttribute`. 
+It includes templates for [MSTest](https://github.com/microsoft/testfx) and [xUnit](https://xunit.net/). You can configure the emitted attributes by changing the values of `classAttribute` and `methodAttribute`.
+
+*Modifying `myriad.toml` [doesn't cause a re-gen](https://github.com/MoiraeSoftware/myriad/issues/83) of existing test classes. You must touch your behavior files.*
 ## Note
 `AD.BehaviorTestGenerator` is in an early stage. For now, its convention based.
 ### Conventions
