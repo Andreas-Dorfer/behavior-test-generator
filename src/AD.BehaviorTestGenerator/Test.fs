@@ -90,13 +90,17 @@ let private toTests config behaviors =
                     let testExpr = pipe (identExpr ["behavior"; prop]) (identExpr ["check"])
                     SynMemberDefn.CreateMember({ SynBindingRcd.Null with Attributes = testMethodAttribute ; Pattern = testMethodName; Expr = testExpr }))
 
-            let disposeMethodName = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["_"; "Dispose"]), [SynPatRcd.Const({ Const = SynConst.Unit; Range = Range.range.Zero })])
-            let disposeExpr = SynExpr.CreateMatch (SynExpr.Upcast(identExpr ["imp"], SynType.Create("obj"), Range.range.Zero), [
-                    SynMatchClause.Clause(SynPat.Named(SynPat.IsInst(SynType.Create("System.IDisposable"), Range.range.Zero), Ident.Create("imp"), false, None, Range.range.Zero), None, SynExpr.CreateInstanceMethodCall(LongIdentWithDots.Create(["imp"; "Dispose"])), Range.range.Zero,DebugPointForTarget.No)
-                    SynMatchClause.Clause(SynPatRcd.CreateWild.FromRcd,None, SynExpr.CreateUnit, Range.range.Zero, DebugPointForTarget.No)
-                ])
-            let dispose = SynMemberDefn.CreateInterface (SynType.Create "System.IDisposable", Some [SynMemberDefn.CreateMember({ SynBindingRcd.Null with Pattern = disposeMethodName; Expr = disposeExpr})])
+            let dispose =
+                match implementation with
+                | Some _ ->
+                    let disposeMethodName = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["_"; "Dispose"]), [SynPatRcd.Const({ Const = SynConst.Unit; Range = Range.range.Zero })])
+                    let disposeExpr = SynExpr.CreateMatch (SynExpr.Upcast(identExpr ["imp"], SynType.Create("obj"), Range.range.Zero), [
+                            SynMatchClause.Clause(SynPat.Named(SynPat.IsInst(SynType.Create("System.IDisposable"), Range.range.Zero), Ident.Create("imp"), false, None, Range.range.Zero), None, SynExpr.CreateInstanceMethodCall(LongIdentWithDots.Create(["imp"; "Dispose"])), Range.range.Zero,DebugPointForTarget.No)
+                            SynMatchClause.Clause(SynPatRcd.CreateWild.FromRcd,None, SynExpr.CreateUnit, Range.range.Zero, DebugPointForTarget.No)
+                        ])
+                    [SynMemberDefn.CreateInterface (SynType.Create "System.IDisposable", Some [SynMemberDefn.CreateMember({ SynBindingRcd.Null with Pattern = disposeMethodName; Expr = disposeExpr})])]
+                | _ -> []
 
-            SynModuleDecl.CreateType(testClassInfo, testClassCtor :: impAndBehavior @ [check] @ testMembers @ [dispose]))
+            SynModuleDecl.CreateType(testClassInfo, testClassCtor :: impAndBehavior @ [check] @ testMembers @ dispose))
 
 let create config (namespace', behaviors) = behaviors |> toTests config |> (AstRcd.SynModuleOrNamespaceRcd.CreateNamespace namespace').AddDeclarations
