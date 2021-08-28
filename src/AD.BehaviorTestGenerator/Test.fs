@@ -70,7 +70,7 @@ let private toTests config behaviors =
                 | Some imp ->
                     let impPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("imp"), [])
                     let impExpr = SynExpr.CreateApp(identExpr [imp], SynExpr.CreateUnit)
-                    let behaviorExpr = pipe (identExpr ["imp"]) (identExpr [name])
+                    let behaviorExpr = SynExpr.CreateApp(identExpr [name], identExpr ["imp"])
                     [
                         SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = impPattern; ReturnInfo = None; Expr = impExpr }.FromRcd], false, false, Range.range.Zero)
                         SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = behaviorPattern; ReturnInfo = None; Expr = behaviorExpr }.FromRcd], false, false, Range.range.Zero)
