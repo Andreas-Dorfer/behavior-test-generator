@@ -5,10 +5,11 @@
 namespace AD.BehaviorTestGenerator.xUnitTests
 
 type BehaviorTest() =
+    let imp = Implementation()
     let check property =
         property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
 
-    member private _.Behavior = Implementation() |> Behavior
+    member private _.Behavior = imp |> Behavior
     [<Xunit.Fact>]
     member test.``always true`` () = test.Behavior.``always true`` |> check
 
@@ -19,3 +20,9 @@ type BehaviorTest() =
     [<Xunit.Fact>]
     member test.``plus is associative`` () =
         test.Behavior.``plus is associative`` |> check
+
+    interface System.IDisposable with
+        member _.Dispose() =
+            match imp :> obj with
+            | :? System.IDisposable as imp -> imp.Dispose()
+            | _ -> ()

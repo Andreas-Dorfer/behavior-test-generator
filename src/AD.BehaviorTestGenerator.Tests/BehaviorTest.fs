@@ -6,10 +6,11 @@ namespace AD.BehaviorTestGenerator.Tests
 
 [<Microsoft.VisualStudio.TestTools.UnitTesting.TestClass>]
 type BehaviorTest() =
+    let imp = Implementation()
     let check property =
         property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
 
-    member private _.Behavior = Implementation() |> Behavior
+    member private _.Behavior = imp |> Behavior
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
     member test.``always true`` () = test.Behavior.``always true`` |> check
 
@@ -20,3 +21,9 @@ type BehaviorTest() =
     [<Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod>]
     member test.``plus is associative`` () =
         test.Behavior.``plus is associative`` |> check
+
+    interface System.IDisposable with
+        member _.Dispose() =
+            match imp :> obj with
+            | :? System.IDisposable as imp -> imp.Dispose()
+            | _ -> ()
