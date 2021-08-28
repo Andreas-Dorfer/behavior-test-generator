@@ -10,7 +10,7 @@
     <Description>A Myriad plugin to generate test classes from behaviors.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Andreas-Dorfer/behavior-test-generator</RepositoryUrl>
-    <PackageTags>F#, BDD, testing, Myriad, MSTest, FsCheck</PackageTags>
+    <PackageTags>F#, BDD, testing, Myriad, MSTest, Xunit, FsCheck</PackageTags>
     <PackageReadmeFile>docs\README.md</PackageReadmeFile>
   </PropertyGroup>
 
