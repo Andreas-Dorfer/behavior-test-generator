@@ -2,7 +2,7 @@
 # AD.BehaviorTestGenerator
 A [Myriad](https://github.com/MoiraeSoftware/myriad) plugin to generate test classes from behaviors.
 ## NuGet Package
-    PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.4
+    PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.6
 ## Example
 Given a definition:
 ```fsharp
@@ -48,21 +48,46 @@ Now, `AD.BehaviorTestGenerator` turns the behavior into a test class:
 ```fsharp
 [<TestClass>]
 type BehaviorTest() =
-    let check property = property >> Async.RunSynchronously |> Check.QuickThrowOnFailure
-
-    member private _.Behavior = Implementation() |> Behavior
-
-    [<TestMethod>]
-    member test.``create a project``() =
-        test.Behavior.``create a project`` |> check
+    let imp = Implementation()
+    let behavior = Behavior imp
+    let check property =
+        property >> Async.RunSynchronously |> Check.QuickThrowOnFailure
 
     [<TestMethod>]
-    member test.``getting an unknown project returns None``() =
-        test.Behavior.``getting an unknown project returns None`` |> check
+    member _.``create a project`` () =
+        behavior.``create a project`` |> check
+
+    [<TestMethod>]
+    member _.``getting an unknown project returns None`` () =
+        behavior.``getting an unknown project returns None`` |> check
+
+    interface IDisposable with
+        member _.Dispose() =
+            match imp :> obj with
+            | :? IDisposable as imp -> imp.Dispose()
+            | _ -> ()
 ```
-It uses [MSTest](https://github.com/microsoft/testfx) and [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
+It uses [FsCheck](https://fscheck.github.io/FsCheck/). You can find the full example [here](https://github.com/Andreas-Dorfer/behavior-test-generator/tree/main/Example).
+## Configuration
+At first build, `myriad.toml` is copied to your project:
+```toml
+[behaviorTest]
+
+# ** MSTest **
+classAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestClass"
+methodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod"
+# ************
+
+# ** Xunit **
+# classAttribute = ""
+# methodAttribute = "Xunit.Fact"
+# ***********
+```
+It includes templates for [MSTest](https://github.com/microsoft/testfx) and [xUnit](https://xunit.net/). You can configure the emitted attributes by changing the values of `classAttribute` and `methodAttribute`.
+
+*Modifying `myriad.toml` [doesn't cause a re-gen](https://github.com/MoiraeSoftware/myriad/issues/83) of existing test classes. You must touch your behavior files.*
 ## Note
-`AD.BehaviorTestGenerator` is in an early stage. For now, its convention based and not configurable.
+`AD.BehaviorTestGenerator` is in an early stage. For now, its convention based.
 ### Conventions
 - The behavior class's name must contain "behavior".
 - The behavior class must have an empty constructor *or* a constructor with a single **typed** parameter for the implementation instance.
