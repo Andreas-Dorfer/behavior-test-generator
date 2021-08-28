@@ -83,7 +83,7 @@ methodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod"
 # methodAttribute = "Xunit.Fact"
 # ***********
 ```
-It includes templates for [MSTest](https://github.com/microsoft/testfx) and [Xunit](https://xunit.net/). You can configure the emitted attributes by changing the values of `classAttribute` and `methodAttribute`. 
+It includes templates for [MSTest](https://github.com/microsoft/testfx) and [xUnit](https://xunit.net/). You can configure the emitted attributes by changing the values of `classAttribute` and `methodAttribute`. 
 ## Note
 `AD.BehaviorTestGenerator` is in an early stage. For now, its convention based.
 ### Conventions
