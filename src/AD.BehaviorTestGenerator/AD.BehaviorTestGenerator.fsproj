@@ -7,7 +7,7 @@
     <PackageId>AndreasDorfer.BehaviorTestGenerator</PackageId>
     <Version>0.1.5</Version>
     <Authors>Andreas Dorfer</Authors>
-    <Description>A Myriad plugin to create test classes from behaviors.</Description>
+    <Description>A Myriad plugin to generate test classes from behaviors.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Andreas-Dorfer/behavior-test-generator</RepositoryUrl>
     <PackageTags>F#, BDD, testing, Myriad, MSTest, FsCheck</PackageTags>
