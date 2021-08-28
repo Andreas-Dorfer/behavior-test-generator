@@ -64,30 +64,31 @@ let private toTests config behaviors =
             let testClassInfo = { SynComponentInfoRcd.Create([Ident.Create (name + "Test")]) with Attributes = testClassAttribute }
             let testClassCtor = SynMemberDefn.CreateImplicitCtor()
 
-            let imp =
+            let impAndBehavior =
+                let behaviorPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("behavior"), [])
                 match implementation with
                 | Some imp ->
                     let impPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("imp"), [])
                     let impExpr = SynExpr.CreateApp(identExpr [imp], SynExpr.CreateUnit)
-                    [SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = impPattern; ReturnInfo = None; Expr = impExpr }.FromRcd], false, false, Range.range.Zero)]
-                | None -> []
+                    let behaviorExpr = pipe (identExpr ["imp"]) (identExpr [name])
+                    [
+                        SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = impPattern; ReturnInfo = None; Expr = impExpr }.FromRcd], false, false, Range.range.Zero)
+                        SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = behaviorPattern; ReturnInfo = None; Expr = behaviorExpr }.FromRcd], false, false, Range.range.Zero)
+                    ]
+                | None ->
+                    let behaviorExpr = SynExpr.CreateApp(identExpr [name], SynExpr.CreateUnit)
+                    [SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = behaviorPattern; ReturnInfo = None; Expr = behaviorExpr }.FromRcd], false, false, Range.range.Zero)]
 
             let checkPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("check"), [SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("property"), [])])
             let checkExpr = pipe (compose (identExpr ["property"]) (identExpr ["Async"; "RunSynchronously"])) (identExpr ["FsCheck"; "Check"; "QuickThrowOnFailure"])
             let check = SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = checkPattern; ReturnInfo = None; Expr = checkExpr }.FromRcd], false, false, Range.range.Zero)
             
-            let behaviorPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["_"; "Behavior"]), [])
-            let behaviorExpressen =
-                match implementation with
-                | Some _ -> pipe (identExpr ["imp"]) (identExpr[name])
-                | None -> SynExpr.CreateApp(identExpr [name], SynExpr.CreateUnit)
-            let behaviorMember = SynMemberDefn.CreateMember({ SynBindingRcd.Null with Access = Some SynAccess.Private ; Pattern = behaviorPattern; Expr = behaviorExpressen })
 
             let testMembers =
                 properties
                 |> List.map (fun prop ->
-                    let testMethodName = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["test"; prop]), [SynPatRcd.Const({ Const = SynConst.Unit; Range = Range.range.Zero })])
-                    let testExpr = pipe (identExpr ["test"; "Behavior"; prop]) (identExpr ["check"])
+                    let testMethodName = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["_"; prop]), [SynPatRcd.Const({ Const = SynConst.Unit; Range = Range.range.Zero })])
+                    let testExpr = pipe (identExpr ["behavior"; prop]) (identExpr ["check"])
                     SynMemberDefn.CreateMember({ SynBindingRcd.Null with Attributes = testMethodAttribute ; Pattern = testMethodName; Expr = testExpr }))
 
             let disposeMethodName = SynPatRcd.CreateLongIdent(LongIdentWithDots.Create(["_"; "Dispose"]), [SynPatRcd.Const({ Const = SynConst.Unit; Range = Range.range.Zero })])
@@ -97,6 +98,6 @@ let private toTests config behaviors =
                 ])
             let dispose = SynMemberDefn.CreateInterface (SynType.Create "System.IDisposable", Some [SynMemberDefn.CreateMember({ SynBindingRcd.Null with Pattern = disposeMethodName; Expr = disposeExpr})])
 
-            SynModuleDecl.CreateType(testClassInfo, testClassCtor :: imp @ [check; behaviorMember] @ testMembers @ [dispose]))
+            SynModuleDecl.CreateType(testClassInfo, testClassCtor :: impAndBehavior @ [check] @ testMembers @ [dispose]))
 
 let create config (namespace', behaviors) = behaviors |> toTests config |> (AstRcd.SynModuleOrNamespaceRcd.CreateNamespace namespace').AddDeclarations

@@ -6,20 +6,20 @@ namespace AD.BehaviorTestGenerator.xUnitTests
 
 type BehaviorTest() =
     let imp = Implementation()
+    let behavior = imp |> Behavior
     let check property =
         property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
 
-    member private _.Behavior = imp |> Behavior
     [<Xunit.Fact>]
-    member test.``always true`` () = test.Behavior.``always true`` |> check
+    member _.``always true`` () = behavior.``always true`` |> check
 
     [<Xunit.Fact>]
-    member test.``plus is commutative`` () =
-        test.Behavior.``plus is commutative`` |> check
+    member _.``plus is commutative`` () =
+        behavior.``plus is commutative`` |> check
 
     [<Xunit.Fact>]
-    member test.``plus is associative`` () =
-        test.Behavior.``plus is associative`` |> check
+    member _.``plus is associative`` () =
+        behavior.``plus is associative`` |> check
 
     interface System.IDisposable with
         member _.Dispose() =
