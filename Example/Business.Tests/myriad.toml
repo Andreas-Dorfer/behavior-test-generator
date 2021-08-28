@@ -1,0 +1,11 @@
+﻿[behaviorTest]
+
+# ** MSTest **
+classAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestClass"
+methodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod"
+# ************
+
+# ** Xunit **
+# classAttribute = ""
+# methodAttribute = "Xunit.Fact"
+# ***********
