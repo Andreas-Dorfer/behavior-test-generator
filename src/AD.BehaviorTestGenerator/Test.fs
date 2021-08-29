@@ -39,6 +39,8 @@ let private toTestProperties (behavior : SynTypeDefn) =
 
 let private attribute parts = [SynAttributeList.Create(SynAttribute.Create(parts |> List.ofArray |> List.map Ident.Create, SynConst.Unit))]
 
+let private configuredAttribute key = Map.tryFind key >> Option.bind (fun value -> if value |> String.length > 0 then value.Split '.' |> attribute |> Some else None) >> Option.defaultValue []
+
 let private identExpr parts = SynExpr.CreateLongIdent(LongIdentWithDots.Create(parts))
 
 let private appExpr op left right = SynExpr.CreateApp(SynExpr.CreateApp(left, SynExpr.CreateIdent(Ident.Create(op))), right)
@@ -52,12 +54,8 @@ let private toTests config behaviors =
     | [] -> []
     | testProperties ->
 
-        let configuredAttribute key =
-            config
-            |> Map.tryFind key
-            |> Option.bind (fun (value : string) -> if value |> String.length > 0 then value.Split '.' |> attribute |> Some else None) |> Option.defaultValue []
-        let testClassAttribute = configuredAttribute Config.classAttribute
-        let testMethodAttribute = configuredAttribute Config.methodAttribute            
+        let testClassAttribute = config |> configuredAttribute Config.classAttribute
+        let testMethodAttribute = config |> configuredAttribute Config.methodAttribute            
 
         testProperties
         |> List.map (fun (name, implementation, properties) ->
