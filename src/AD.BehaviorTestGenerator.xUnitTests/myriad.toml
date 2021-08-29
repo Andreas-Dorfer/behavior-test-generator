@@ -5,7 +5,7 @@
 # methodAttribute = "Microsoft.VisualStudio.TestTools.UnitTesting.TestMethod"
 # ************
 
-# ** Xunit **
+# ** xUnit **
 classAttribute = ""
 methodAttribute = "Xunit.Fact"
 # ***********
