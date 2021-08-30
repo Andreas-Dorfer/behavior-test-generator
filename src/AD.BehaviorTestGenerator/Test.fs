@@ -3,6 +3,7 @@
 open FSharp.Compiler
 open FSharp.Compiler.SyntaxTree
 open FsAst
+open Myriad.Core
 
 let private memberName = function
     | SynMemberDefn.Member (member', _) ->
@@ -29,13 +30,25 @@ let private memberNames = function
             Some (imp, ms)
     | _ -> None
 
+let private checkType (behavior : SynTypeDefn) =
+    let default' = Check.Async
+    match behavior |> Ast.getAttribute<BehaviorTestAttribute> with
+    | Some a ->
+        match a.ArgExpr with
+        | SynExpr.Paren ((SynExpr.LongIdent (_, ident, _, _)), _, _, _) ->
+            match ident.Lid.Tail.Head.idText |> Check.TryParse with
+            | (true, check) -> check
+            | _ -> default'
+        | _ -> default'
+    | None -> default'
+
 let private toTestProperties (behavior : SynTypeDefn) =
     let rcd = behavior.ToRcd
     match rcd.Repr |> memberNames with
     | None _ -> None
     | Some (imp, members) ->
         let name = rcd.Info.Id.Head.idText
-        Some (name, imp, members)
+        Some (name, imp, members, behavior |> checkType)
 
 let private attribute parts = [SynAttributeList.Create(SynAttribute.Create(parts |> List.ofArray |> List.map Ident.Create, SynConst.Unit))]
 
@@ -58,7 +71,7 @@ let private toTests config behaviors =
         let testMethodAttribute = config |> configuredAttribute Config.methodAttribute            
 
         testProperties
-        |> List.map (fun (name, implementation, properties) ->
+        |> List.map (fun (name, implementation, properties, checkType) ->
             let testClassInfo = { SynComponentInfoRcd.Create([Ident.Create (name + "Test")]) with Attributes = testClassAttribute }
             let testClassCtor = SynMemberDefn.CreateImplicitCtor()
 
@@ -77,9 +90,16 @@ let private toTests config behaviors =
                     let behaviorExpr = SynExpr.CreateApp(identExpr [name], SynExpr.CreateUnit)
                     [SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = behaviorPattern; ReturnInfo = None; Expr = behaviorExpr }.FromRcd], false, false, Range.range.Zero)]
 
-            let checkPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("check"), [SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("property"), [])])
-            let checkExpr = pipe (compose (identExpr ["property"]) (identExpr ["Async"; "RunSynchronously"])) (identExpr ["FsCheck"; "Check"; "QuickThrowOnFailure"])
-            let check = SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = checkPattern; ReturnInfo = None; Expr = checkExpr }.FromRcd], false, false, Range.range.Zero)
+            let check =
+                match checkType with
+                | Check.Sync ->
+                    let checkPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("check"), [])
+                    let checkExpr = identExpr ["FsCheck"; "Check"; "QuickThrowOnFailure"]
+                    SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = checkPattern; ReturnInfo = None; Expr = checkExpr }.FromRcd], false, false, Range.range.Zero)
+                | _ ->
+                    let checkPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("check"), [SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("property"), [])])
+                    let checkExpr = pipe (compose (identExpr ["property"]) (identExpr ["Async"; "RunSynchronously"])) (identExpr ["FsCheck"; "Check"; "QuickThrowOnFailure"])
+                    SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = checkPattern; ReturnInfo = None; Expr = checkExpr }.FromRcd], false, false, Range.range.Zero)
             
             let testMembers =
                 properties
