@@ -27,3 +27,4 @@ type BehaviorTest() =
             match imp :> obj with
             | :? System.IDisposable as imp -> imp.Dispose()
             | _ -> ()
+

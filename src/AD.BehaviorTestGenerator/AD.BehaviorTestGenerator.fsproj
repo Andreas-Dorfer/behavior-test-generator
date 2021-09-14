@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <WarnOn>3390;$(WarnOn)</WarnOn>
     <PackageId>AndreasDorfer.BehaviorTestGenerator</PackageId>
@@ -27,9 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Myriad.Core" Version="0.5.3" PrivateAssets="all" />
-    <PackageReference Include="Myriad.Sdk" Version="0.5.3" PrivateAssets="none" />
-    <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
+    <PackageReference Include="Myriad.Core" Version="0.6.0" PrivateAssets="all" />
+    <PackageReference Include="Myriad.Sdk" Version="0.6.0" PrivateAssets="none" />
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="tools" Visible="false" />
   </ItemGroup>
 
