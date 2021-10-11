@@ -48,7 +48,7 @@ Now, `AD.BehaviorTestGenerator` turns the behavior into a test class:
 ```fsharp
 [<TestClass>]
 type BehaviorTest() =
-    let imp = Implementation()
+    let imp = new Implementation()
     let behavior = Behavior imp
     let check property =
         property >> Async.RunSynchronously |> Check.QuickThrowOnFailure
