@@ -80,7 +80,7 @@ let private toTests config behaviors =
                 match implementation with
                 | Some imp ->
                     let impPattern = SynPatRcd.CreateLongIdent(LongIdentWithDots.CreateString("imp"), [])
-                    let impExpr = SynExpr.CreateApp(identExpr [imp], SynExpr.CreateUnit)
+                    let impExpr = SynExpr.New(false, SynType.Create imp, SynExpr.CreateUnit, Range.range.Zero)
                     let behaviorExpr = SynExpr.CreateApp(identExpr [name], identExpr ["imp"])
                     [
                         SynMemberDefn.LetBindings ([{ SynBindingRcd.Let with Pattern = impPattern; ReturnInfo = None; Expr = impExpr }.FromRcd], false, false, Range.range.Zero)

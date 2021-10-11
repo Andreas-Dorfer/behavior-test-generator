@@ -5,7 +5,7 @@
 namespace AD.BehaviorTestGenerator.xUnitTests
 
 type BehaviorTest() =
-    let imp = Implementation()
+    let imp = new Implementation()
     let behavior = Behavior imp
     let check property =
         property >> Async.RunSynchronously |> FsCheck.Check.QuickThrowOnFailure
