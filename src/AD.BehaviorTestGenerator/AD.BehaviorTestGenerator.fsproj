@@ -5,7 +5,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <WarnOn>3390;$(WarnOn)</WarnOn>
     <PackageId>AndreasDorfer.BehaviorTestGenerator</PackageId>
-    <Version>0.1.6</Version>
+    <Version>0.1.7</Version>
     <Authors>Andreas Dorfer</Authors>
     <Description>A Myriad plugin to generate test classes from behaviors.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
