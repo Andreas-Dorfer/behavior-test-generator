@@ -15,4 +15,4 @@ type Generator () =
                 System.Diagnostics.Debugger.Launch() |> ignore
 #endif
             let config = context.ConfigGetter |> Config.read
-            context.InputFilename |> Behavior.fromFile |> List.map (Test.create config)
+            context.InputFilename |> Behavior.fromFile |> List.map (Test.create config) |> Output.Ast

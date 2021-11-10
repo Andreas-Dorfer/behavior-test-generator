@@ -121,4 +121,6 @@ let private toTests config behaviors =
 
             SynModuleDecl.CreateType(testClassInfo, testClassCtor :: impAndBehavior @ [check] @ testMembers @ dispose))
 
-let create config (namespace', behaviors) = behaviors |> toTests config |> (AstRcd.SynModuleOrNamespaceRcd.CreateNamespace namespace').AddDeclarations
+let create config (namespace', behaviors) =
+    let rcd = behaviors |> toTests config |> (AstRcd.SynModuleOrNamespaceRcd.CreateNamespace namespace').AddDeclarations
+    rcd.FromRcd
