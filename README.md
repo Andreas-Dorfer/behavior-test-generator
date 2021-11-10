@@ -2,7 +2,7 @@
 # AD.BehaviorTestGenerator
 A [Myriad](https://github.com/MoiraeSoftware/myriad) plugin to generate test classes from behaviors.
 ## NuGet Package
-    PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.6
+    PM> Install-Package AndreasDorfer.BehaviorTestGenerator -Version 0.1.7
 ## Example
 Given a definition:
 ```fsharp
